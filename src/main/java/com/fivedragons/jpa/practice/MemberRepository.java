@@ -1,5 +1,6 @@
 package com.fivedragons.jpa.practice;
 
+import com.fivedragons.jpa.practice.domain.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;

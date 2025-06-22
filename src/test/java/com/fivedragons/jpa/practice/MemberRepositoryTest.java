@@ -1,5 +1,6 @@
 package com.fivedragons.jpa.practice;
 
+import com.fivedragons.jpa.practice.domain.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

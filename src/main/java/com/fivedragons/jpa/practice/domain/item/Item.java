@@ -1,6 +1,7 @@
 package com.fivedragons.jpa.practice.domain.item;
 
 import com.fivedragons.jpa.practice.domain.Category;
+import com.fivedragons.jpa.practice.exception.NotEnoughStockException;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -19,7 +20,6 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter
-@Setter
 public abstract class Item {
 
     @Id @GeneratedValue
@@ -32,4 +32,26 @@ public abstract class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+
+    // 비즈니스 로직
+    /**
+     * stock 증가
+     */
+    public void addStock(int stock) {
+        this.stockQuantity += stock;
+    }
+
+    /**
+     * stock 감소
+     *  - 0보다 작을 수 없음
+     */
+    public void removeStock(int stock) {
+        int restStock = this.stockQuantity - stock;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock");
+        }
+        this.stockQuantity = restStock;
+    }
+
+
 }

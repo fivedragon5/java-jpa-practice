@@ -1,5 +1,6 @@
 package com.fivedragons.jpa.practice.controller;
 
+import com.fivedragons.jpa.practice.service.dto.UpdateItemDto;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,14 @@ public class BookForm {
 
     private String author;
     private String isbn;
+
+    public UpdateItemDto toDto() {
+        return UpdateItemDto.builder()
+                .name(this.name)
+                .price(this.price)
+                .stockQuantity(this.getStockQuantity())
+                .author(this.getAuthor())
+                .isbn(this.getIsbn())
+                .build();
+    }
 }

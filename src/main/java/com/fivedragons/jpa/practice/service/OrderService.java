@@ -4,6 +4,7 @@ import com.fivedragons.jpa.practice.domain.Delivery;
 import com.fivedragons.jpa.practice.domain.Member;
 import com.fivedragons.jpa.practice.domain.Order;
 import com.fivedragons.jpa.practice.domain.OrderItem;
+import com.fivedragons.jpa.practice.domain.OrderSearch;
 import com.fivedragons.jpa.practice.domain.item.Item;
 import com.fivedragons.jpa.practice.repository.ItemRepository;
 import com.fivedragons.jpa.practice.repository.MemberRepository;
@@ -11,6 +12,8 @@ import com.fivedragons.jpa.practice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -60,7 +63,7 @@ public class OrderService {
     /**
      * 검색
      */
-//    public List<Order> findOrder(OrderSearch orderSearch) {
-//        return orderRepository.findAll(orderSearch);
-//    }
+    public List<Order> findOrder(OrderSearch orderSearch) {
+        return orderRepository.findAll(orderSearch);
+    }
 }

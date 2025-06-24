@@ -10,10 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +20,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter
-@SuperBuilder
-@NoArgsConstructor
+@Setter
 public abstract class Item {
 
     @Id @GeneratedValue
@@ -35,7 +32,6 @@ public abstract class Item {
     private int stockQuantity;
 
     @ManyToMany(mappedBy = "items")
-    @Builder.Default // 빌더에서 기본값으로 사용하도록 명시
     private List<Category> categories = new ArrayList<>();
 
     // 비즈니스 로직
@@ -57,6 +53,4 @@ public abstract class Item {
         }
         this.stockQuantity = restStock;
     }
-
-
 }

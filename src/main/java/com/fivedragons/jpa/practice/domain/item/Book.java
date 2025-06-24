@@ -5,14 +5,14 @@ import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Setter;
 
 @Entity
 @DiscriminatorValue("B")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@SuperBuilder
+@Setter
 public class Book extends Item {
     private String author;
     private String isbn;

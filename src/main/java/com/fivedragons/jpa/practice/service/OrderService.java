@@ -42,7 +42,7 @@ public class OrderService {
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         // 주문 생성
-        Order order = Order.createORder(member, delivery, orderItem);
+        Order order = Order.createOrder(member, delivery, orderItem);
 
         // 주문 저장 : delivery, orderItem Cascade 로 한번에 저장
         orderRepository.save(order);

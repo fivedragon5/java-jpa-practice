@@ -1,6 +1,7 @@
 package com.fivedragons.jpa.practice.controller;
 
 import com.fivedragons.jpa.practice.domain.item.Book;
+import com.fivedragons.jpa.practice.domain.item.Item;
 import com.fivedragons.jpa.practice.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,4 +40,10 @@ public class ItemController {
         return "redirect:/";
     }
 
+    @GetMapping("/items")
+    public String list(Model model) {
+        List<Item> list = itemService.findItems();
+        model.addAttribute("items", list);
+        return "items/itemList";
+    }
 }

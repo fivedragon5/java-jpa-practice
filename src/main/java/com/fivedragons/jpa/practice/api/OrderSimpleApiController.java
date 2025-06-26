@@ -3,6 +3,7 @@ package com.fivedragons.jpa.practice.api;
 import com.fivedragons.jpa.practice.domain.Address;
 import com.fivedragons.jpa.practice.domain.Order;
 import com.fivedragons.jpa.practice.domain.OrderSearch;
+import com.fivedragons.jpa.practice.repository.OrderRepository;
 import com.fivedragons.jpa.practice.service.OrderService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class OrderSimpleApiController {
 
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
@@ -39,6 +41,14 @@ public class OrderSimpleApiController {
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
         List<Order> orders = orderService.findOrders(new OrderSearch());
+        return orders.stream()
+                .map(SimpleOrderDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());

@@ -4,6 +4,7 @@ import com.fivedragons.jpa.practice.domain.Address;
 import com.fivedragons.jpa.practice.domain.Order;
 import com.fivedragons.jpa.practice.domain.OrderSearch;
 import com.fivedragons.jpa.practice.repository.OrderRepository;
+import com.fivedragons.jpa.practice.repository.OrderSimpleQueryDto;
 import com.fivedragons.jpa.practice.service.OrderService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,11 @@ public class OrderSimpleApiController {
         return orders.stream()
                 .map(SimpleOrderDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderRepository.findOrderDtos();
     }
 
     @Data

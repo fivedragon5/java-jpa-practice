@@ -5,8 +5,10 @@ import com.fivedragons.jpa.practice.domain.Order;
 import com.fivedragons.jpa.practice.domain.OrderItem;
 import com.fivedragons.jpa.practice.domain.OrderSearch;
 import com.fivedragons.jpa.practice.domain.OrderStatus;
-import com.fivedragons.jpa.practice.repository.order.query.OrderQueryDto;
 import com.fivedragons.jpa.practice.repository.OrderRepository;
+import com.fivedragons.jpa.practice.repository.order.query.OrderFlatDto;
+import com.fivedragons.jpa.practice.repository.order.query.OrderItemQueryDto;
+import com.fivedragons.jpa.practice.repository.order.query.OrderQueryDto;
 import com.fivedragons.jpa.practice.repository.order.query.OrderQueryRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +80,31 @@ public class OrderApiController {
     @GetMapping("/api/v5/orders")
     public List<OrderQueryDto> ordersV5() {
         return orderQueryRepository.findAllByDtoOptimization();
+    }
+
+    @GetMapping("/api/v6/orders")
+    public List<OrderQueryDto> ordersV6() {
+        List<OrderFlatDto> allByDtoFlat = orderQueryRepository.findAllByDtoFlat();
+        // OrderFlatDto를 OrderQueryDto로 변환 orderId로 묶기
+        return allByDtoFlat.stream()
+                .collect(Collectors.groupingBy(OrderFlatDto::getOrderId))
+                .values().stream()
+                .map(orderFlatDtos -> {
+                    OrderFlatDto first = orderFlatDtos.get(0);
+                    OrderQueryDto orderQueryDto = new OrderQueryDto(
+                            first.getOrderId(),
+                            first.getName(),
+                            first.getOrderDate(),
+                            first.getOrderStatus(),
+                            first.getAddress()
+                    );
+                    List<OrderItemQueryDto> orderItems = orderFlatDtos.stream()
+                            .map(o -> new OrderItemQueryDto(o.getOrderId(), o.getItemName(), o.getOrderPrice(), o.getCount()))
+                            .collect(Collectors.toList());
+                    orderQueryDto.setOrderItems(orderItems);
+                    return orderQueryDto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Getter

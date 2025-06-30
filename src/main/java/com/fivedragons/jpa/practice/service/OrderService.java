@@ -67,6 +67,7 @@ public class OrderService {
      * 검색
      */
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAllByString(orderSearch);
+        // Querydsl을 사용한 검색
+        return orderRepository.findAll(orderSearch);
     }
 }

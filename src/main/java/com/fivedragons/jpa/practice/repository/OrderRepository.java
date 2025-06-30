@@ -2,19 +2,29 @@ package com.fivedragons.jpa.practice.repository;
 
 import com.fivedragons.jpa.practice.domain.Order;
 import com.fivedragons.jpa.practice.domain.OrderSearch;
+import com.fivedragons.jpa.practice.domain.OrderStatus;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.fivedragons.jpa.practice.domain.QMember.member;
+import static com.fivedragons.jpa.practice.domain.QOrder.order;
+
 @Repository
-@RequiredArgsConstructor
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory jpaQueryFactory;
+
+    public OrderRepository(EntityManager em) {
+        this.em = em;
+        this.jpaQueryFactory = new JPAQueryFactory(em);
+    }
 
     public void save(Order order) {
         em.persist(order);
@@ -61,6 +71,32 @@ public class OrderRepository {
         }
 
         return query.getResultList();
+    }
+
+    public List<Order> findAll(OrderSearch orderSearch) {
+        return jpaQueryFactory.select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(
+                        statusEq(orderSearch.getOrderStatus()),
+                        memberNameLike(orderSearch.getMemberName())
+                )
+                .limit(1000L)
+                .fetch();
+    }
+
+    private BooleanExpression memberNameLike(String memberName) {
+        if (!StringUtils.hasText(memberName)) {
+            return null;
+        }
+        return member.name.contains(memberName);
+    }
+
+    private BooleanExpression statusEq(OrderStatus status) {
+        if (status == null) {
+            return null;
+        }
+        return order.status.eq(status);
     }
 
     public List<Order> findAllWithMemberDelivery() {

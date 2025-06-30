@@ -2,7 +2,7 @@ package com.fivedragons.jpa.practice.service;
 
 
 import com.fivedragons.jpa.practice.domain.Member;
-import com.fivedragons.jpa.practice.repository.MemberRepository;
+import com.fivedragons.jpa.practice.repository.MemberRepositoryOld;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 class MemberServiceTest {
 
     @Autowired MemberService memberService;
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepositoryOld memberRepositoryOld;
 
     @Test
     public void 회원가입() {
@@ -29,7 +30,7 @@ class MemberServiceTest {
         Long savedId = memberService.join(member);
 
         //then
-        Member findMember = memberRepository.findOne(savedId);
+        Member findMember = memberRepositoryOld.findOne(savedId);
         Assertions.assertEquals(member, findMember);
     }
     

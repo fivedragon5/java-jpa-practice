@@ -2,6 +2,7 @@ package com.fivedragons.jpa.practice.service;
 
 import com.fivedragons.jpa.practice.domain.Member;
 import com.fivedragons.jpa.practice.repository.MemberRepository;
+import com.fivedragons.jpa.practice.repository.MemberRepositoryOld;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final MemberRepositoryOld memberRepositoryOld;
     private final MemberRepository memberRepository;
 
     /**
@@ -45,7 +47,8 @@ public class MemberService {
      * 회원 한건 조회
      */
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
     }
 
     /**
@@ -53,7 +56,8 @@ public class MemberService {
      */
     @Transactional
     public void update(Long id, String name) {
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + id));
         member.setName(name);
     }
 }

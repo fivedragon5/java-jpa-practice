@@ -8,6 +8,7 @@ import com.fivedragons.jpa.practice.domain.OrderSearch;
 import com.fivedragons.jpa.practice.domain.item.Item;
 import com.fivedragons.jpa.practice.repository.ItemRepository;
 import com.fivedragons.jpa.practice.repository.MemberRepository;
+import com.fivedragons.jpa.practice.repository.MemberRepositoryOld;
 import com.fivedragons.jpa.practice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final MemberRepositoryOld memberRepositoryOld;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
 
@@ -30,7 +32,8 @@ public class OrderService {
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
         // 회원 조회
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다. id = " + memberId));
         // 아이템 조회
         Item item = itemRepository.findOne(itemId);
 
